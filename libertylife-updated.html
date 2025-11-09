@@ -1,0 +1,2004 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LibertyLife - Dein Premium Roleplay Server</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #2563eb; --secondary: #0ea5e9; --success: #10b981; --danger: #ef4444;
+  --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0; --gray-500: #64748b;
+  --text: #0f172a; --text-dim: #64748b; --border: #e2e8f0; --shadow: rgba(15, 23, 42, 0.08);
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideIn { from { transform: translateX(-20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--gray-50); color: var(--text); line-height: 1.6; }
+.hidden { display: none !important; }
+
+/* Navigation */
+.top-nav { background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 1000; padding: 0.75rem 0; box-shadow: 0 1px 3px var(--shadow); }
+.nav-container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
+.nav-brand { font-size: 1.75rem; font-weight: 900; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.nav-menu { display: flex; gap: 0.5rem; flex: 1; justify-content: center; }
+.nav-item { padding: 0.625rem 1.25rem; border-radius: 0.625rem; cursor: pointer; transition: all 0.2s; color: var(--text-dim); font-weight: 600; }
+.nav-item:hover { background: var(--gray-100); color: var(--primary); }
+.nav-item.active { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+.nav-actions { display: flex; gap: 0.75rem; }
+
+/* Admin */
+.admin-container { display: flex; min-height: 100vh; }
+.admin-sidebar { width: 280px; background: white; border-right: 1px solid var(--border); padding: 2rem 0; position: fixed; height: 100vh; overflow-y: auto; z-index: 100; }
+.admin-nav-section { margin-bottom: 2rem; padding: 0 1rem; }
+.admin-nav-section-title { font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim); font-weight: 700; padding: 0 1rem; margin-bottom: 0.75rem; letter-spacing: 0.1em; }
+.admin-nav-item { display: flex; align-items: center; gap: 0.875rem; padding: 0.75rem 1rem; border-radius: 0.625rem; cursor: pointer; transition: all 0.2s; color: var(--text-dim); font-weight: 600; margin-bottom: 0.375rem; }
+.admin-nav-item:hover { background: var(--gray-100); color: var(--primary); }
+.admin-nav-item.active { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
+.admin-nav-item .badge { margin-left: auto; background: var(--danger); color: white; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 0.5rem; font-weight: 700; min-width: 20px; text-align: center; }
+.admin-content { flex: 1; margin-left: 280px; padding: 2rem; background: var(--gray-50); }
+.admin-header { background: white; border-radius: 1rem; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 1px 3px var(--shadow); display: flex; align-items: center; justify-content: space-between; }
+.admin-header-title { font-size: 1.75rem; font-weight: 800; }
+
+/* Components */
+.page-container { max-width: 1400px; margin: 0 auto; padding: 3rem 2rem; }
+.page-header { text-align: center; margin-bottom: 4rem; animation: fadeIn 0.6s; }
+.page-title { font-size: 3.5rem; font-weight: 900; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem; }
+.page-subtitle { font-size: 1.25rem; color: var(--text-dim); max-width: 700px; margin: 0 auto; }
+.hero { text-align: center; padding: 6rem 2rem; background: linear-gradient(135deg, rgba(37,99,235,0.05) 0%, rgba(14,165,233,0.05) 100%); border-radius: 2rem; margin: 2rem 0 4rem; }
+.hero-title { font-size: 4rem; font-weight: 900; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1.5rem; }
+.hero-subtitle { font-size: 1.5rem; color: var(--text-dim); margin-bottom: 3rem; }
+.hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+.btn { padding: 0.875rem 1.75rem; border: none; border-radius: 0.75rem; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.625rem; text-decoration: none; font-family: inherit; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+.btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,99,235,0.4); }
+.btn-secondary { background: var(--gray-100); color: var(--text); }
+.btn-secondary:hover:not(:disabled) { background: var(--gray-200); }
+.btn-success { background: var(--success); color: white; }
+.btn-danger { background: var(--danger); color: white; }
+.btn-sm { padding: 0.5rem 1rem; font-size: 0.875rem; }
+.btn-lg { padding: 1.25rem 2.5rem; font-size: 1.125rem; }
+
+.card { background: white; border-radius: 1rem; padding: 2rem; box-shadow: 0 1px 3px var(--shadow); margin-bottom: 2rem; }
+.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+.card-title { font-size: 1.5rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; }
+
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+
+.feature-card { background: white; border-radius: 1rem; padding: 2rem; text-align: center; transition: all 0.3s; border: 2px solid var(--border); }
+.feature-card:hover { transform: translateY(-8px); box-shadow: 0 12px 24px var(--shadow); border-color: var(--primary); }
+.feature-icon { width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 1.25rem; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; margin: 0 auto 1.5rem; }
+.feature-title { font-size: 1.375rem; font-weight: 800; margin-bottom: 0.75rem; }
+.feature-description { color: var(--text-dim); }
+
+.stat-card { background: white; border-radius: 1rem; padding: 2rem; text-align: center; border: 2px solid var(--border); }
+.stat-value { font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; }
+.stat-label { color: var(--text-dim); font-weight: 600; }
+
+.form-group { margin-bottom: 1.5rem; }
+.form-label { display: block; font-weight: 700; margin-bottom: 0.5rem; }
+.form-input, .form-textarea, .form-select { width: 100%; padding: 0.875rem 1.125rem; border: 2px solid var(--border); border-radius: 0.75rem; font-size: 1rem; font-family: inherit; transition: all 0.2s; background: white; }
+.form-input:focus, .form-textarea:focus, .form-select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(37,99,235,0.1); }
+.form-textarea { min-height: 120px; resize: vertical; }
+.form-hint { font-size: 0.875rem; color: var(--text-dim); margin-top: 0.5rem; }
+
+.item-card { background: white; border: 2px solid var(--border); border-radius: 1rem; padding: 1.5rem; transition: all 0.2s; }
+.item-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.item-title { font-size: 1.125rem; font-weight: 700; }
+.item-subtitle { font-size: 0.875rem; color: var(--text-dim); margin-top: 0.25rem; }
+
+.badge { display: inline-flex; align-items: center; padding: 0.375rem 0.875rem; border-radius: 0.5rem; font-size: 0.8125rem; font-weight: 700; }
+.badge-primary { background: rgba(37,99,235,0.1); color: var(--primary); }
+.badge-success { background: rgba(16,185,129,0.1); color: var(--success); }
+.badge-danger { background: rgba(239,68,68,0.1); color: var(--danger); }
+.badge-info { background: rgba(59,130,246,0.1); color: #3b82f6; }
+
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 2rem; }
+.modal-content { background: white; border-radius: 1.25rem; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+.modal-header { padding: 2rem 2rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.modal-title { font-size: 1.5rem; font-weight: 800; }
+.modal-close { width: 36px; height: 36px; border: none; background: var(--gray-100); border-radius: 0.5rem; font-size: 1.5rem; cursor: pointer; }
+.modal-body { padding: 2rem; }
+.modal-footer { padding: 1.5rem 2rem; border-top: 1px solid var(--border); display: flex; gap: 1rem; justify-content: flex-end; }
+
+.notification { position: fixed; top: 2rem; right: 2rem; background: white; padding: 1.25rem 1.5rem; border-radius: 0.875rem; box-shadow: 0 8px 24px var(--shadow); display: flex; align-items: center; gap: 1rem; z-index: 3000; min-width: 300px; border-left: 4px solid var(--primary); }
+.notification.success { border-left-color: var(--success); }
+.notification.danger { border-left-color: var(--danger); }
+.notification-icon { font-size: 1.5rem; }
+.notification-message { flex: 1; font-weight: 600; }
+
+.info-section { background: white; border-radius: 1rem; padding: 2rem; margin-bottom: 2rem; border: 2px solid var(--border); }
+.info-title { font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+.info-content { color: var(--text-dim); line-height: 1.8; }
+.info-list { list-style: none; padding: 0; }
+.info-list li { padding: 0.75rem 0; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 1rem; }
+.info-list li:last-child { border-bottom: none; }
+
+.role-red { color: #ef4444; }
+.role-purple { color: #a855f7; }
+.role-blue { color: #3b82f6; }
+.role-cyan { color: #06b6d4; }
+.role-green { color: #10b981; }
+.role-yellow { color: #f59e0b; }
+.role-pink { color: #ec4899; }
+.role-gray { color: #64748b; }
+
+.chart-container { background: white; border-radius: 1rem; padding: 2rem; border: 2px solid var(--border); margin-bottom: 2rem; }
+.chart-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 1.5rem; }
+.bar-chart { display: flex; flex-direction: column; gap: 1rem; }
+.bar-item { display: flex; align-items: center; gap: 1rem; }
+.bar-label { min-width: 120px; font-weight: 600; font-size: 0.9375rem; }
+.bar-track { flex: 1; height: 32px; background: var(--gray-100); border-radius: 0.5rem; overflow: hidden; }
+.bar-fill { height: 100%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: flex-end; padding-right: 0.75rem; color: white; font-weight: 700; font-size: 0.875rem; transition: width 0.8s; }
+
+.user-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 700; color: white; }
+
+.server-timer {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  box-shadow: 0 1px 3px var(--shadow);
+}
+
+.timer-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-dim);
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.timer-display {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.timer-block {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+  min-width: 80px;
+}
+
+.timer-value {
+  font-size: 2rem;
+  font-weight: 900;
+  color: white;
+  line-height: 1;
+}
+
+.timer-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 768px) {
+  .admin-sidebar { transform: translateX(-100%); }
+  .admin-content { margin-left: 0; }
+  .nav-menu { display: none; }
+  .hero-title { font-size: 2.5rem; }
+  .page-title { font-size: 2.5rem; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav" id="publicNav">
+  <div class="nav-container">
+    <div class="nav-brand">LibertyLife</div>
+    <div class="nav-menu">
+      <div class="nav-item" onclick="showPublicPage('home', event)">🏠 Start</div>
+      <div class="nav-item" onclick="showPublicPage('info', event)">Info</div>
+      <div class="nav-item" onclick="showPublicPage('rules', event)">📜 Regelwerk</div>
+      <div class="nav-item" onclick="showPublicPage('apply', event)">📝 Bewerbung</div>
+      <div class="nav-item" onclick="showPublicPage('team', event)">👥 Team</div>
+    </div>
+    <div class="nav-actions">
+      <button class="btn btn-secondary btn-sm" onclick="window.open('https://discord.gg/nYVqAkPcXS', '_blank')">💬 Discord</button>
+      <button class="btn btn-primary btn-sm" onclick="showLoginPage()">🔐 Admin Login</button>
+    </div>
+  </div>
+</nav>
+
+<div id="publicPages"></div>
+
+<div class="admin-container hidden" id="adminContainer">
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div style="padding: 0 2rem 2rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem;">
+      <div class="nav-brand">LibertyLife</div>
+    </div>
+    
+    <nav>
+      <div class="admin-nav-section">
+        <div class="admin-nav-section-title">HAUPT</div>
+        <div class="admin-nav-item" onclick="showAdminPage('dashboard', event)">📊 Dashboard</div>
+        <div class="admin-nav-item" onclick="showAdminPage('whitelist', event)">
+          📋 Whitelist
+          <span class="badge" id="pendingBadge">0</span>
+        </div>
+      </div>
+
+      <div class="admin-nav-section">
+        <div class="admin-nav-section-title">VERWALTUNG</div>
+        <div class="admin-nav-item" onclick="showAdminPage('team', event)">👥 Team</div>
+        <div class="admin-nav-item" onclick="showAdminPage('info-editor', event)">Info bearbeiten</div>
+        <div class="admin-nav-item" onclick="showAdminPage('logs', event)">📝 Logs</div>
+      </div>
+
+      <div class="admin-nav-section" id="systemSection">
+        <div class="admin-nav-section-title">SYSTEM</div>
+        <div class="admin-nav-item" onclick="showAdminPage('settings', event)">⚙️ Einstellungen</div>
+        <div class="admin-nav-item" onclick="showAdminPage('backup', event)">💾 Backup</div>
+      </div>
+    </nav>
+
+    <div id="adminProfile"></div>
+  </aside>
+
+  <main class="admin-content" id="adminContent"></main>
+</div>
+
+<div id="modals"></div>
+
+<script>
+// Rollenhierarchie
+const ROLE_HIERARCHY = {
+  main: [
+    { name: 'Projektinhaber', color: 'red', category: 'Management', level: 1 },
+    { name: 'Projektleitung', color: 'red', category: 'Management', level: 2 },
+    { name: 'Stv. Projektleitung', color: 'red', category: 'Management', level: 3 },
+    { name: 'Management', color: 'red', category: 'Management', level: 4 }
+  ],
+  development: [
+    { name: 'Teamleitung', color: 'purple', category: 'Development', level: 5 },
+    { name: 'Head-Development', color: 'purple', category: 'Development', level: 6 },
+    { name: 'Head-Dev', color: 'purple', category: 'Development', level: 7 },
+    { name: 'Development', color: 'purple', category: 'Development', level: 8 },
+    { name: 'Developer', color: 'purple', category: 'Development', level: 9 },
+    { name: 'Designer', color: 'purple', category: 'Development', level: 10 }
+  ],
+  specialized: [
+    { name: 'Head-Car-Dev', color: 'purple', category: 'Specialized Dev', level: 11 },
+    { name: 'Car-Dev', color: 'purple', category: 'Specialized Dev', level: 12 },
+    { name: 'Head-Clothing-Dev', color: 'purple', category: 'Specialized Dev', level: 13 },
+    { name: 'Clothing-Dev', color: 'purple', category: 'Specialized Dev', level: 14 },
+    { name: 'Mapper', color: 'purple', category: 'Specialized Dev', level: 15 }
+  ],
+  admin: [
+    { name: 'Superadmin', color: 'purple', category: 'Administration', level: 16 },
+    { name: 'Fraktionsverwaltungs Leitung', color: 'cyan', category: 'Administration', level: 17 },
+    { name: 'Stv. Fraktionsverwaltungs Leitung', color: 'cyan', category: 'Administration', level: 18 },
+    { name: 'Fraktionsverwaltung', color: 'cyan', category: 'Administration', level: 19 },
+    { name: 'Administrations Leitung', color: 'purple', category: 'Administration', level: 20 },
+    { name: 'Moderation Leitung', color: 'purple', category: 'Administration', level: 21 },
+    { name: 'Supportleitung', color: 'purple', category: 'Administration', level: 22 },
+    { name: 'Admin [III]', color: 'blue', category: 'Administration', level: 23 },
+    { name: 'Admin [II]', color: 'blue', category: 'Administration', level: 24 },
+    { name: 'Admin [I]', color: 'blue', category: 'Administration', level: 25 },
+    { name: 'Moderator [III]', color: 'blue', category: 'Administration', level: 27 },
+    { name: 'Moderator [II]', color: 'blue', category: 'Administration', level: 28 },
+    { name: 'Moderator [I]', color: 'blue', category: 'Administration', level: 29 },
+    { name: 'Supporter [III]', color: 'blue', category: 'Administration', level: 31 },
+    { name: 'Supporter [II]', color: 'blue', category: 'Administration', level: 32 },
+    { name: 'Supporter [I]', color: 'blue', category: 'Administration', level: 33 },
+     { name: 'Supporter [Test]', color: 'blue', category: 'Administration', level: 34 },
+     { name: 'Moderator [Test]', color: 'blue', category: 'Administration', level: 30 },
+      { name: 'Admin [Test]', color: 'blue', category: 'Administration', level: 26 }
+  ],
+  secondary: [
+    { name: 'Social Media Leitung', color: 'green', category: 'Community', level: 100 },
+    { name: 'Social Media Verwalter', color: 'green', category: 'Community', level: 101 },
+    { name: 'Einreiseverwaltung Leitung', color: 'yellow', category: 'Community', level: 102 },
+    { name: 'Stv. Einreiseverwaltung Leitung', color: 'yellow', category: 'Community', level: 103 },
+    { name: 'Einreiseverwaltung', color: 'yellow', category: 'Community', level: 104 },
+    { name: 'Guide', color: 'yellow', category: 'Community', level: 105 },
+    { name: 'Event Team Leitung', color: 'pink', category: 'Events', level: 106 },
+    { name: 'Stv. Event Team Leitung', color: 'pink', category: 'Events', level: 107 },
+    { name: 'Event Team', color: 'pink', category: 'Events', level: 108 },
+    { name: 'PC Durchsuchung Leitung', color: 'gray', category: 'Security', level: 109 },
+    { name: 'Stv. PC Durchsuchung Leitung', color: 'gray', category: 'Security', level: 110 },
+    { name: 'PC Durchsuchung', color: 'gray', category: 'Security', level: 111 },
+    { name: 'Balancement', color: 'gray', category: 'Game Design', level: 112 },
+    { name: 'Kooperationsmanager', color: 'gray', category: 'Management', level: 113 },
+    { name: 'Serverhelfer', color: 'gray', category: 'Support', level: 114 }
+  ]
+};
+
+const ALL_ROLES = [...ROLE_HIERARCHY.main, ...ROLE_HIERARCHY.development, ...ROLE_HIERARCHY.specialized, ...ROLE_HIERARCHY.admin, ...ROLE_HIERARCHY.secondary];
+
+// Admin Accounts
+let adminAccounts = [
+  { id: 1, username: 'Bright', discordUser: 'Bright', password: '1302', canManageAdmins: true, createdAt: new Date().toISOString() }
+];
+
+// Daten
+let teamMembers = [
+  { id: 1, name: 'Bright', mainRole: 'Projektinhaber', secondaryRoles: [], password: '1302', discordTag: 'bright_brighr' }
+];
+let applications = [];
+let activityLog = [];
+let archivedLogs = [];
+let serverSettings = { serverName: 'LibertyLife', maxPlayers: 256, whitelistEnabled: true };
+let infoPageData = {
+  description: 'Willkommen bei LibertyLife - Deinem Premium FiveM Roleplay Server! Erlebe einzigartiges Roleplay in einer lebendigen Welt.',
+  features: ['Professionelles Development-Team', 'Aktive Community & Events', 'Faire Administration', 'Individuelle Fraktionen'],
+  archivedFeatures: [],
+  discordLink: 'https://discord.gg/nYVqAkPcXS'
+};
+let rules = [
+  { id: 1, title: 'Respektvoller Umgang', content: 'Behandle alle Spieler mit Respekt. Beleidigungen, Rassismus und Diskriminierung werden nicht toleriert.' },
+  { id: 2, title: 'Roleplay First', content: 'Roleplay steht an erster Stelle. Bleibe stets in deiner Rolle und vermeide OOC-Gespräche im IC-Chat.' },
+  { id: 3, title: 'Powergaming verboten', content: 'Nutze keine Spielmechaniken aus, die unrealistisch sind oder anderen das Roleplay erschweren.' },
+  { id: 4, title: 'Metagaming verboten', content: 'Nutze keine Informationen, die dein Charakter IC nicht wissen kann (z.B. aus Streams oder Discord).' }
+];
+
+let isLoggedIn = false;
+let currentAdmin = null;
+let serverLaunchDate = new Date('2026-01-02T18:00:00'); // Server Release: 2. Januar 2026, 18:00 Uhr
+
+// Storage
+function saveData() {
+  localStorage.setItem('llrp_teamMembers', JSON.stringify(teamMembers));
+  localStorage.setItem('llrp_applications', JSON.stringify(applications));
+  localStorage.setItem('llrp_activityLog', JSON.stringify(activityLog));
+  localStorage.setItem('llrp_archivedLogs', JSON.stringify(archivedLogs));
+  localStorage.setItem('llrp_serverSettings', JSON.stringify(serverSettings));
+  localStorage.setItem('llrp_infoPageData', JSON.stringify(infoPageData));
+  localStorage.setItem('llrp_rules', JSON.stringify(rules));
+  localStorage.setItem('llrp_adminAccounts', JSON.stringify(adminAccounts));
+  localStorage.setItem('llrp_serverLaunchDate', serverLaunchDate.toISOString());
+}
+
+function loadData() {
+  const saved = {
+    team: localStorage.getItem('llrp_teamMembers'),
+    apps: localStorage.getItem('llrp_applications'),
+    logs: localStorage.getItem('llrp_activityLog'),
+    archivedLogs: localStorage.getItem('llrp_archivedLogs'),
+    settings: localStorage.getItem('llrp_serverSettings'),
+    info: localStorage.getItem('llrp_infoPageData'),
+    rules: localStorage.getItem('llrp_rules'),
+    admins: localStorage.getItem('llrp_adminAccounts'),
+    launchDate: localStorage.getItem('llrp_serverLaunchDate')
+  };
+  
+  if (saved.team) teamMembers = JSON.parse(saved.team);
+  if (saved.apps) applications = JSON.parse(saved.apps);
+  if (saved.logs) activityLog = JSON.parse(saved.logs);
+  if (saved.archivedLogs) archivedLogs = JSON.parse(saved.archivedLogs);
+  if (saved.settings) serverSettings = JSON.parse(saved.settings);
+  if (saved.info) {
+    infoPageData = JSON.parse(saved.info);
+    // Ensure archivedFeatures exists
+    if (!infoPageData.archivedFeatures) {
+      infoPageData.archivedFeatures = [];
+    }
+  }
+  if (saved.rules) rules = JSON.parse(saved.rules);
+  if (saved.admins) adminAccounts = JSON.parse(saved.admins);
+  if (saved.launchDate) serverLaunchDate = new Date(saved.launchDate);
+  
+  updateBadges();
+  startTimer();
+}
+
+function updateBadges() {
+  const pending = applications.filter(a => a.status === 'Ausstehend').length;
+  const badge = document.getElementById('pendingBadge');
+  if (badge) {
+    badge.textContent = pending;
+    badge.style.display = pending > 0 ? 'block' : 'none';
+  }
+}
+
+function addLogEntry(message, type = 'info') {
+  const log = { id: Date.now(), message, type, timestamp: new Date().toISOString() };
+  activityLog.unshift(log);
+  if (activityLog.length > 100) activityLog.pop();
+  saveData();
+}
+
+// Helper
+function formatDate(isoString) {
+  return new Date(isoString).toLocaleString('de-DE', {
+    year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+  });
+}
+
+function getLogIcon(type) {
+  const icons = { team: '👥', application: '📝', whitelist: '📋', settings: '⚙️', system: '🔧', info: '📄' };
+  return icons[type] || '📄';
+}
+
+function getRoleColor(roleName) {
+  const role = ALL_ROLES.find(r => r.name === roleName);
+  return role ? role.color : 'gray';
+}
+
+function showNotification(message, type = 'success') {
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.innerHTML = `
+    <div class="notification-icon">${type === 'success' ? '✅' : '❌'}</div>
+    <div class="notification-message">${message}</div>
+  `;
+  document.body.appendChild(notification);
+  setTimeout(() => notification.remove(), 3000);
+}
+
+function exportData() {
+  const data = { 
+    teamMembers, 
+    applications, 
+    activityLog, 
+    archivedLogs,
+    serverSettings, 
+    infoPageData, 
+    rules, 
+    adminAccounts, 
+    serverLaunchDate: serverLaunchDate.toISOString(), 
+    exportDate: new Date().toISOString() 
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `libertylife-backup-${Date.now()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  addLogEntry('Backup erstellt', 'system');
+  showNotification('Backup erfolgreich erstellt!');
+}
+
+// Timer Functions
+let timerInterval = null;
+
+function startTimer() {
+  updateTimer();
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(updateTimer, 1000);
+}
+
+function updateTimer() {
+  const now = new Date();
+  const diff = serverLaunchDate - now;
+  
+  if (diff <= 0) {
+    // Server ist gestartet
+    const uptime = now - serverLaunchDate;
+    updateTimerDisplay(uptime, true);
+    return;
+  }
+  
+  // Countdown bis zum Start
+  updateTimerDisplay(diff, false);
+}
+
+function updateTimerDisplay(milliseconds, isUptime) {
+  const timerElement = document.getElementById('serverTimer');
+  if (!timerElement) return;
+  
+  const seconds = Math.floor(milliseconds / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+  
+  const displayDays = days;
+  const displayHours = hours % 24;
+  const displayMinutes = minutes % 60;
+  const displaySeconds = seconds % 60;
+  
+  const titleText = isUptime ? '🟢 Server Online seit' : '⏱️ Server Launch Countdown';
+  
+  timerElement.innerHTML = `
+    <div class="timer-title">${titleText}</div>
+    <div class="timer-display">
+      <div class="timer-block">
+        <div class="timer-value">${String(displayDays).padStart(2, '0')}</div>
+        <div class="timer-label">Tage</div>
+      </div>
+      <div class="timer-block">
+        <div class="timer-value">${String(displayHours).padStart(2, '0')}</div>
+        <div class="timer-label">Stunden</div>
+      </div>
+      <div class="timer-block">
+        <div class="timer-value">${String(displayMinutes).padStart(2, '0')}</div>
+        <div class="timer-label">Minuten</div>
+      </div>
+      <div class="timer-block">
+        <div class="timer-value">${String(displaySeconds).padStart(2, '0')}</div>
+        <div class="timer-label">Sekunden</div>
+      </div>
+    </div>
+  `;
+}
+
+// Navigation
+function showPublicPage(page, evt) {
+  document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+  if (evt && evt.target) {
+    evt.target.classList.add('active');
+  } else {
+    // Finde das richtige Nav-Item basierend auf der Seite
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+      if (item.textContent.includes(getPageIcon(page))) {
+        item.classList.add('active');
+      }
+    });
+  }
+  
+  const container = document.getElementById('publicPages');
+  switch(page) {
+    case 'home': renderHomePage(container); break;
+    case 'info': renderInfoPage(container); break;
+    case 'rules': renderRulesPage(container); break;
+    case 'apply': renderApplyPage(container); break;
+    case 'team': renderTeamPage(container); break;
+  }
+}
+
+function getPageIcon(page) {
+  const icons = {
+    home: '🏠',
+    info: '📄',
+    rules: '📜',
+    apply: '📝',
+    team: '👥'
+  };
+  return icons[page] || '';
+}
+
+function showLoginPage() {
+  showModal('login', `
+    <div class="modal-header">
+      <h2 class="modal-title">🔐 Admin Login</h2>
+      <button class="modal-close" onclick="closeModal('login')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Discord Benutzername</label>
+        <input type="text" id="loginDiscordUser" class="form-input" placeholder="Discord Benutzername">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Passwort</label>
+        <input type="password" id="loginPassword" class="form-input" placeholder="Passwort">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('login')">Abbrechen</button>
+      <button class="btn btn-primary" onclick="attemptLogin()">Login</button>
+    </div>
+  `);
+  setTimeout(() => document.getElementById('loginDiscordUser')?.focus(), 100);
+}
+
+function attemptLogin() {
+  const discordUser = document.getElementById('loginDiscordUser').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  
+  const admin = adminAccounts.find(a => a.discordUser === discordUser && a.password === password);
+  
+  if (admin) {
+    isLoggedIn = true;
+    currentAdmin = admin;
+    closeModal('login');
+    showAdminPanel();
+    addLogEntry(`${admin.username} eingeloggt`, 'system');
+    showNotification('Erfolgreich eingeloggt!');
+  } else {
+    showNotification('Falscher Benutzername oder Passwort!', 'danger');
+  }
+}
+
+function showAdminPanel() {
+  document.getElementById('publicNav').classList.add('hidden');
+  document.getElementById('publicPages').classList.add('hidden');
+  document.getElementById('adminContainer').classList.remove('hidden');
+  updateAdminSidebar();
+  showAdminPage('dashboard');
+}
+
+function updateAdminSidebar() {
+  // Update system section with admin accounts link if authorized
+  const systemSection = document.getElementById('systemSection');
+  if (systemSection && currentAdmin && currentAdmin.canManageAdmins) {
+    const existingAdminLink = systemSection.querySelector('[onclick*="admin-accounts"]');
+    if (!existingAdminLink) {
+      const adminAccountsLink = document.createElement('div');
+      adminAccountsLink.className = 'admin-nav-item';
+      adminAccountsLink.onclick = (e) => showAdminPage('admin-accounts', e);
+      adminAccountsLink.innerHTML = '👤 Admin Accounts';
+      systemSection.appendChild(adminAccountsLink);
+    }
+  }
+  
+  // Update admin profile
+  const profileContainer = document.getElementById('adminProfile');
+  if (profileContainer && currentAdmin) {
+    profileContainer.innerHTML = `
+      <div style="padding: 1rem 1.5rem; margin: 1.5rem 1rem; background: var(--gray-50); border-radius: 0.875rem; border: 1px solid var(--border);">
+        <div style="display: flex; align-items: center; gap: 0.875rem;">
+          <div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: 700; color: white;">
+            ${currentAdmin.username.charAt(0).toUpperCase()}
+          </div>
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-weight: 700; font-size: 0.9375rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              ${currentAdmin.username}
+            </div>
+            <div style="font-size: 0.8125rem; color: var(--text-dim);">
+              ${currentAdmin.discordUser}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="padding: 1rem;">
+        <button class="btn btn-secondary" style="width: 100%;" onclick="backToPublic()">🏠 Zur Website</button>
+      </div>
+    `;
+  }
+}
+
+function backToPublic() {
+  document.getElementById('adminContainer').classList.add('hidden');
+  document.getElementById('publicNav').classList.remove('hidden');
+  document.getElementById('publicPages').classList.remove('hidden');
+  showPublicPage('home');
+}
+
+function showAdminPage(page, evt) {
+  document.querySelectorAll('.admin-nav-item').forEach(item => item.classList.remove('active'));
+  if (evt && evt.target) {
+    // Finde das parent admin-nav-item element
+    let target = evt.target;
+    while (target && !target.classList.contains('admin-nav-item')) {
+      target = target.parentElement;
+    }
+    if (target) {
+      target.classList.add('active');
+    }
+  }
+  
+  const content = document.getElementById('adminContent');
+  switch(page) {
+    case 'dashboard': renderAdminDashboard(content); break;
+    case 'whitelist': renderAdminWhitelist(content); break;
+    case 'team': renderAdminTeam(content); break;
+    case 'info-editor': renderInfoEditor(content); break;
+    case 'logs': renderAdminLogs(content); break;
+    case 'settings': renderAdminSettings(content); break;
+    case 'backup': renderAdminBackup(content); break;
+    case 'admin-accounts': renderAdminAccounts(content); break;
+  }
+}
+
+// Public Pages
+function renderHomePage(container) {
+  container.innerHTML = `
+    <div class="hero">
+      <div class="hero-title">LibertyLife</div>
+      <div class="hero-subtitle">Erlebe authentisches Roleplay in einer einzigartigen FiveM-Welt</div>
+      <div class="hero-actions">
+        <button class="btn btn-primary btn-lg" onclick="showPublicPage('apply')">Jetzt bewerben</button>
+        <button class="btn btn-secondary btn-lg" onclick="window.open('https://discord.gg/nYVqAkPcXS', '_blank')">Discord beitreten</button>
+      </div>
+    </div>
+
+    <div class="page-container">
+      <div class="server-timer" id="serverTimer">
+        <div class="timer-title">⏱️ Lädt...</div>
+      </div>
+
+      <div class="grid-3">
+        <div class="feature-card">
+          <div class="feature-icon">🎮</div>
+          <div class="feature-title">Authentisches RP</div>
+          <div class="feature-description">Tauche ein in realistisches Roleplay mit professionellen Spielern</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">👥</div>
+          <div class="feature-title">Aktive Community</div>
+          <div class="feature-description">Werde Teil einer engagierten und freundlichen Community</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🛠️</div>
+          <div class="feature-title">Professionelles Team</div>
+          <div class="feature-description">Erfahrenes Development- und Admin-Team für bestes Erlebnis</div>
+        </div>
+      </div>
+
+      <div class="info-section" style="margin-top: 4rem;">
+        <div class="info-title">📊 Server Statistiken</div>
+        <div class="grid-4" style="margin-top: 2rem;">
+          <div class="stat-card">
+            <div class="stat-value">${teamMembers.length}</div>
+            <div class="stat-label">Team Mitglieder</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${applications.length}</div>
+            <div class="stat-label">Bewerbungen</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${serverSettings.maxPlayers}</div>
+            <div class="stat-label">Max. Spieler</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${serverSettings.whitelistEnabled ? 'Offen' : 'Geschlossen'}</div>
+            <div class="stat-label">Whitelist Status</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  startTimer();
+}
+
+function renderInfoPage(container) {
+  container.innerHTML = `
+    <div class="page-container">
+      <div class="page-header">
+        <h1 class="page-title">Informationen</h1>
+        <p class="page-subtitle">${infoPageData.description}</p>
+      </div>
+
+      <div class="info-section">
+        <div class="info-title">✨ Unsere Features</div>
+        <ul class="info-list">
+          ${infoPageData.features.map(feature => `
+            <li><span style="font-size: 1.25rem;">✅</span><div>${feature}</div></li>
+          `).join('')}
+        </ul>
+      </div>
+
+      <div class="info-section">
+        <div class="info-title">🔗 Verbinde dich mit uns</div>
+        <div class="info-content">
+          <p>Tritt unserem Discord bei und bleibe auf dem Laufenden!</p>
+          <button class="btn btn-primary" style="margin-top: 1rem;" onclick="window.open('${infoPageData.discordLink}', '_blank')">💬 Discord beitreten</button>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <div class="info-title">📝 Bewerbungsprozess</div>
+        <ul class="info-list" style="margin-top: 1rem;">
+          <li><span style="font-size: 1.25rem;">1️⃣</span><div>Fülle das Bewerbungsformular vollständig aus</div></li>
+          <li><span style="font-size: 1.25rem;">2️⃣</span><div>Unser Team prüft deine Bewerbung</div></li>
+          <li><span style="font-size: 1.25rem;">3️⃣</span><div>Du erhältst eine Rückmeldung per Discord</div></li>
+          <li><span style="font-size: 1.25rem;">4️⃣</span><div>Bei Annahme bekommst du Zugang zum Server</div></li>
+        </ul>
+      </div>
+    </div>
+  `;
+}
+
+function renderRulesPage(container) {
+  container.innerHTML = `
+    <div class="page-container">
+      <div class="page-header">
+        <h1 class="page-title">📜 Regelwerk</h1>
+        <p class="page-subtitle">Bitte lies und befolge unsere Regeln, um ein faires Spielerlebnis zu gewährleisten</p>
+      </div>
+
+      ${rules.map((rule, index) => `
+        <div class="info-section">
+          <div class="info-title">${index + 1}. ${rule.title}</div>
+          <div class="info-content">${rule.content}</div>
+        </div>
+      `).join('')}
+
+      <div class="card" style="text-align: center;">
+        <h2 class="card-title" style="justify-content: center;">⚠️ Wichtiger Hinweis</h2>
+        <p style="color: var(--text-dim); margin-top: 1rem;">
+          Verstöße gegen diese Regeln können zu Verwarnungen, Kicks oder permanenten Bans führen.
+          Unser Admin-Team behält sich das Recht vor, in Einzelfällen angemessen zu handeln.
+        </p>
+      </div>
+    </div>
+  `;
+}
+
+function renderApplyPage(container) {
+  if (!serverSettings.whitelistEnabled) {
+    container.innerHTML = `
+      <div class="page-container">
+        <div class="page-header">
+          <h1 class="page-title">🔒 Bewerbungen geschlossen</h1>
+          <p class="page-subtitle">Derzeit nehmen wir keine neuen Bewerbungen an</p>
+        </div>
+        <div class="card" style="text-align: center;">
+          <p style="color: var(--text-dim); font-size: 1.125rem;">
+            Bitte schau später wieder vorbei oder tritt unserem Discord bei, um Updates zu erhalten!
+          </p>
+          <button class="btn btn-primary" style="margin-top: 2rem;" onclick="window.open('https://discord.gg/nYVqAkPcXS', '_blank')">💬 Discord beitreten</button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="page-container">
+      <div class="page-header">
+        <h1 class="page-title">📝 Bewerbung</h1>
+        <p class="page-subtitle">Fülle das Formular aus und werde Teil unserer Community</p>
+      </div>
+
+      <div class="card">
+        <form onsubmit="submitApplication(event)" id="applicationForm">
+          <div class="form-group">
+            <label class="form-label">Discord Name *</label>
+            <input type="text" id="discordName" class="form-input" required placeholder="z.B. Spieler#1234">
+            <div class="form-hint">Gib deinen vollständigen Discord-Namen mit Tag an</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Vorname *</label>
+            <input type="text" id="firstName" class="form-input" required placeholder="Dein Vorname">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Nachname *</label>
+            <input type="text" id="lastName" class="form-input" required placeholder="Dein Nachname">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Alter *</label>
+            <input type="number" id="age" class="form-input" required min="16" placeholder="Mindestens 16 Jahre">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Roleplay Erfahrung *</label>
+            <textarea id="experience" class="form-textarea" required placeholder="Erzähle uns von deiner Roleplay-Erfahrung... (min. 100 Zeichen)" minlength="100"></textarea>
+            <div class="form-hint">Beschreibe deine bisherige RP-Erfahrung ausführlich</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Warum möchtest du bei uns spielen? *</label>
+            <textarea id="motivation" class="form-textarea" required placeholder="Was motiviert dich, Teil unserer Community zu werden? (min. 100 Zeichen)" minlength="100"></textarea>
+            <div class="form-hint">Erkläre uns deine Motivation</div>
+          </div>
+
+          <div class="form-group">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="rulesAccept" required style="width: 20px; height: 20px;">
+              <span>Ich habe das Regelwerk gelesen und akzeptiert *</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Bewerbung abschicken</button>
+        </form>
+      </div>
+    </div>
+  `;
+}
+
+function submitApplication(event) {
+  event.preventDefault();
+  
+  const discordName = document.getElementById('discordName').value.trim();
+  const firstName = document.getElementById('firstName').value.trim();
+  const lastName = document.getElementById('lastName').value.trim();
+  const age = parseInt(document.getElementById('age').value);
+  const experience = document.getElementById('experience').value.trim();
+  const motivation = document.getElementById('motivation').value.trim();
+
+  const app = {
+    id: Date.now(),
+    discordName,
+    name: `${firstName} ${lastName}`,
+    age,
+    roleplayExperience: experience,
+    motivation,
+    status: 'Ausstehend',
+    submittedAt: new Date().toISOString()
+  };
+
+  applications.push(app);
+  saveData();
+  updateBadges();
+  addLogEntry(`Neue Bewerbung von ${app.name}`, 'application');
+
+  showNotification('Bewerbung erfolgreich eingereicht!');
+  document.getElementById('applicationForm').reset();
+}
+
+function renderTeamPage(container) {
+  const grouped = {};
+  teamMembers.forEach(member => {
+    const role = ALL_ROLES.find(r => r.name === member.mainRole);
+    const category = role ? role.category : 'Sonstige';
+    if (!grouped[category]) grouped[category] = [];
+    grouped[category].push(member);
+  });
+
+  Object.keys(grouped).forEach(category => {
+    grouped[category].sort((a, b) => {
+      const roleA = ALL_ROLES.find(r => r.name === a.mainRole);
+      const roleB = ALL_ROLES.find(r => r.name === b.mainRole);
+      return (roleA?.level || 999) - (roleB?.level || 999);
+    });
+  });
+
+  const categoryOrder = ['Management', 'Development', 'Specialized Dev', 'Administration', 'Community', 'Events', 'Security', 'Game Design', 'Support', 'Sonstige'];
+
+  container.innerHTML = `
+    <div class="page-container">
+      <div class="page-header">
+        <h1 class="page-title">👥 Unser Team</h1>
+        <p class="page-subtitle">Lerne die Menschen hinter LibertyLife kennen</p>
+      </div>
+
+      ${categoryOrder.filter(cat => grouped[cat]).map(category => `
+        <div class="info-section">
+          <div class="info-title">${category}</div>
+          <div class="grid-3" style="margin-top: 1.5rem;">
+            ${grouped[category].map(member => `
+              <div class="feature-card">
+                <div class="user-avatar" style="margin: 0 auto 1rem; width: 64px; height: 64px; font-size: 1.75rem;">${member.name.charAt(0)}</div>
+                <div class="feature-title">${member.name}</div>
+                <div class="badge badge-primary" style="margin: 0.5rem auto;">
+                  <span class="role-${getRoleColor(member.mainRole)}">${member.mainRole}</span>
+                </div>
+                ${member.secondaryRoles && member.secondaryRoles.length > 0 ? `
+                  <div style="margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
+                    ${member.secondaryRoles.map(role => `
+                      <div class="badge badge-info" style="font-size: 0.75rem;">
+                        <span class="role-${getRoleColor(role)}">${role}</span>
+                      </div>
+                    `).join('')}
+                  </div>
+                ` : ''}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// Admin Pages
+function renderAdminDashboard(content) {
+  const pendingApps = applications.filter(a => a.status === 'Ausstehend').length;
+  const acceptedApps = applications.filter(a => a.status === 'Akzeptiert').length;
+  const rejectedApps = applications.filter(a => a.status === 'Abgelehnt').length;
+
+  const categoryStats = {};
+  teamMembers.forEach(member => {
+    const role = ALL_ROLES.find(r => r.name === member.mainRole);
+    const category = role ? role.category : 'Sonstige';
+    categoryStats[category] = (categoryStats[category] || 0) + 1;
+  });
+
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  const recentApps = applications.filter(a => new Date(a.submittedAt) > sevenDaysAgo).length;
+
+  content.innerHTML = `
+    <div class="admin-header">
+      <h1 class="admin-header-title">📊 Dashboard</h1>
+    </div>
+
+    <div class="grid-4">
+      <div class="stat-card">
+        <div class="stat-value">${teamMembers.length}</div>
+        <div class="stat-label">Team Mitglieder</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${pendingApps}</div>
+        <div class="stat-label">Ausstehende Bewerbungen</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${recentApps}</div>
+        <div class="stat-label">Neue Bewerbungen (7 Tage)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${activityLog.length}</div>
+        <div class="stat-label">Log Einträge</div>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <div class="chart-title">📊 Team-Verteilung nach Kategorie</div>
+      <div class="bar-chart">
+        ${Object.entries(categoryStats).sort((a, b) => b[1] - a[1]).map(([category, count]) => {
+          const maxCount = Math.max(...Object.values(categoryStats));
+          const percentage = (count / maxCount) * 100;
+          return `
+            <div class="bar-item">
+              <div class="bar-label">${category}</div>
+              <div class="bar-track">
+                <div class="bar-fill" style="width: ${percentage}%">${count}</div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <div class="chart-title">📈 Bewerbungs-Statistiken</div>
+      <div class="bar-chart">
+        <div class="bar-item">
+          <div class="bar-label">Angenommen</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${acceptedApps > 0 ? (acceptedApps / applications.length * 100) : 0}%; background: var(--success);">${acceptedApps}</div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label">Ausstehend</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${pendingApps > 0 ? (pendingApps / applications.length * 100) : 0}%; background: #f59e0b;">${pendingApps}</div>
+          </div>
+        </div>
+        <div class="bar-item">
+          <div class="bar-label">Abgelehnt</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width: ${rejectedApps > 0 ? (rejectedApps / applications.length * 100) : 0}%; background: var(--danger);">${rejectedApps}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">📝 Neueste Aktivitäten</h2>
+        <button class="btn btn-secondary btn-sm" onclick="showAdminPage('logs')">Alle anzeigen</button>
+      </div>
+      ${activityLog.slice(0, 5).length === 0 ? '<p style="color: var(--text-dim);">Keine Aktivitäten</p>' : `
+        <div style="display: grid; gap: 0.75rem;">
+          ${activityLog.slice(0, 5).map(log => `
+            <div class="item-card" style="padding: 1rem;">
+              <div style="display: flex; gap: 1rem; align-items: center;">
+                <span style="font-size: 1.5rem;">${getLogIcon(log.type)}</span>
+                <div style="flex: 1;">
+                  <div style="font-weight: 600;">${log.message}</div>
+                  <div style="font-size: 0.875rem; color: var(--text-dim);">${formatDate(log.timestamp)}</div>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `}
+    </div>
+  `;
+}
+
+function renderAdminWhitelist(content) {
+  const pending = applications.filter(a => a.status === 'Ausstehend');
+  content.innerHTML = `
+    <div class="admin-header">
+      <h1 class="admin-header-title">📋 Whitelist</h1>
+      <button class="btn ${serverSettings.whitelistEnabled ? 'btn-danger' : 'btn-success'}" onclick="toggleWhitelist()">
+        ${serverSettings.whitelistEnabled ? '🔒 Schließen' : '🔓 Öffnen'}
+      </button>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">📋 Ausstehende Bewerbungen</h2>
+        <span class="badge badge-primary">${pending.length} ausstehend</span>
+      </div>
+      ${pending.length === 0 ? '<p style="color: var(--text-dim);">Keine ausstehenden Bewerbungen</p>' : `
+        <div style="display: grid; gap: 1rem;">
+          ${pending.map(a => `
+            <div class="item-card">
+              <div class="item-header">
+                <div>
+                  <div class="item-title">${a.name}</div>
+                  <div class="item-subtitle">${a.discordName} • ${a.age} Jahre • ${formatDate(a.submittedAt)}</div>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                  <button class="btn btn-sm btn-success" onclick="acceptApp(${a.id})">✅</button>
+                  <button class="btn btn-sm btn-danger" onclick="rejectApp(${a.id})">❌</button>
+                </div>
+              </div>
+              <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                <div style="margin-bottom: 1rem;">
+                  <strong>Roleplay Erfahrung:</strong>
+                  <p style="margin-top: 0.5rem; color: var(--text-dim);">${a.roleplayExperience}</p>
+                </div>
+                <div>
+                  <strong>Motivation:</strong>
+                  <p style="margin-top: 0.5rem; color: var(--text-dim);">${a.motivation}</p>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `}
+    </div>
+  `;
+}
+
+function toggleWhitelist() {
+  serverSettings.whitelistEnabled = !serverSettings.whitelistEnabled;
+  saveData();
+  addLogEntry(`Whitelist ${serverSettings.whitelistEnabled ? 'geöffnet' : 'geschlossen'}`, 'whitelist');
+  showNotification(`Whitelist ${serverSettings.whitelistEnabled ? 'geöffnet' : 'geschlossen'}!`);
+  showAdminPage('whitelist');
+}
+
+function acceptApp(id) {
+  const a = applications.find(x => x.id === id);
+  if (!a) return;
+  a.status = 'Akzeptiert';
+  saveData();
+  addLogEntry(`Bewerbung von ${a.name} akzeptiert`, 'application');
+  showNotification('Bewerbung akzeptiert!');
+  showAdminPage('whitelist');
+}
+
+function rejectApp(id) {
+  const a = applications.find(x => x.id === id);
+  if (!a || !confirm(`Bewerbung von ${a.name} ablehnen?`)) return;
+  a.status = 'Abgelehnt';
+  saveData();
+  addLogEntry(`Bewerbung von ${a.name} abgelehnt`, 'application');
+  showNotification('Bewerbung abgelehnt!');
+  showAdminPage('whitelist');
+}
+
+function renderAdminTeam(content) {
+  const grouped = {};
+  teamMembers.forEach(member => {
+    const role = ALL_ROLES.find(r => r.name === member.mainRole);
+    const category = role ? role.category : 'Sonstige';
+    if (!grouped[category]) grouped[category] = [];
+    grouped[category].push(member);
+  });
+
+  const categoryOrder = ['Management', 'Development', 'Specialized Dev', 'Administration', 'Community', 'Events', 'Security', 'Game Design', 'Support', 'Sonstige'];
+
+  content.innerHTML = `
+    <div class="admin-header">
+      <h1 class="admin-header-title">👥 Team Verwaltung</h1>
+      <button class="btn btn-success" onclick="showAddMemberModal()">➕ Mitglied hinzufügen</button>
+    </div>
+
+    ${categoryOrder.filter(cat => grouped[cat]).map(category => `
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">${category}</h2>
+          <span class="badge badge-primary">${grouped[category].length} Mitglieder</span>
+        </div>
+        <div style="display: grid; gap: 1rem;">
+          ${grouped[category].map(m => `
+            <div class="item-card">
+              <div class="item-header">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                  <div class="user-avatar" style="width: 48px; height: 48px;">${m.name.charAt(0)}</div>
+                  <div>
+                    <div class="item-title">${m.name}</div>
+                    <div class="item-subtitle">
+                      <span class="role-${getRoleColor(m.mainRole)}">${m.mainRole}</span>
+                      ${m.discordTag ? ` • ${m.discordTag}` : ''}
+                    </div>
+                    ${m.secondaryRoles && m.secondaryRoles.length > 0 ? `
+                      <div style="margin-top: 0.5rem; display: flex; flex-wrap: wrap; gap: 0.375rem;">
+                        ${m.secondaryRoles.map(role => `
+                          <span class="badge badge-info" style="font-size: 0.75rem;">
+                            <span class="role-${getRoleColor(role)}">${role}</span>
+                          </span>
+                        `).join('')}
+                      </div>
+                    ` : ''}
+                  </div>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                  <button class="btn btn-sm btn-secondary" onclick="editMember(${m.id})">✏️</button>
+                  ${m.mainRole !== 'Projektinhaber' ? `
+                    <button class="btn btn-sm btn-danger" onclick="kickTeamMember(${m.id})">🗑️</button>
+                  ` : ''}
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function showAddMemberModal() {
+  const mainRoles = [...ROLE_HIERARCHY.main, ...ROLE_HIERARCHY.development, ...ROLE_HIERARCHY.specialized, ...ROLE_HIERARCHY.admin];
+  const secondaryRoles = ROLE_HIERARCHY.secondary;
+
+  showModal('addMember', `
+    <div class="modal-header">
+      <h2 class="modal-title">➕ Neues Team-Mitglied</h2>
+      <button class="modal-close" onclick="closeModal('addMember')">×</button>
+    </div>
+    <div class="modal-body">
+      <form id="addMemberForm">
+        <div class="form-group">
+          <label class="form-label">Name *</label>
+          <input type="text" id="memberName" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Discord Tag</label>
+          <input type="text" id="memberDiscord" class="form-input" placeholder="z.B. Name#1234">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Hauptrolle *</label>
+          <select id="memberMainRole" class="form-select" required>
+            <option value="">Bitte wählen...</option>
+            ${mainRoles.map(role => `<option value="${role.name}">${role.name} (${role.category})</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nebenrollen (optional)</label>
+          <div style="max-height: 200px; overflow-y: auto; border: 2px solid var(--border); border-radius: 0.75rem; padding: 1rem;">
+            ${secondaryRoles.map(role => `
+              <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; cursor: pointer;">
+                <input type="checkbox" name="secondaryRoles" value="${role.name}" style="width: 18px; height: 18px;">
+                <span>${role.name} (${role.category})</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Passwort (optional)</label>
+          <input type="password" id="memberPassword" class="form-input" placeholder="Für Admin-Zugang">
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('addMember')">Abbrechen</button>
+      <button class="btn btn-success" onclick="submitAddMember()">➕ Hinzufügen</button>
+    </div>
+  `);
+}
+
+function submitAddMember() {
+  const name = document.getElementById('memberName').value.trim();
+  const discord = document.getElementById('memberDiscord').value.trim();
+  const mainRole = document.getElementById('memberMainRole').value;
+  const password = document.getElementById('memberPassword').value;
+  
+  const secondaryRoleCheckboxes = document.querySelectorAll('input[name="secondaryRoles"]:checked');
+  const secondaryRoles = Array.from(secondaryRoleCheckboxes).map(cb => cb.value);
+
+  if (!name || !mainRole) {
+    showNotification('Bitte fülle alle Pflichtfelder aus!', 'danger');
+    return;
+  }
+
+  const member = { id: Date.now(), name, mainRole, secondaryRoles, discordTag: discord || null, password: password || null };
+
+  teamMembers.push(member);
+  saveData();
+  addLogEntry(`${name} zum Team hinzugefügt (${mainRole})`, 'team');
+  showNotification('Mitglied hinzugefügt!');
+  closeModal('addMember');
+  showAdminPage('team');
+}
+
+function editMember(id) {
+  const member = teamMembers.find(m => m.id === id);
+  if (!member) return;
+
+  const mainRoles = [...ROLE_HIERARCHY.main, ...ROLE_HIERARCHY.development, ...ROLE_HIERARCHY.specialized, ...ROLE_HIERARCHY.admin];
+  const secondaryRoles = ROLE_HIERARCHY.secondary;
+
+  showModal('editMember', `
+    <div class="modal-header">
+      <h2 class="modal-title">✏️ Mitglied bearbeiten</h2>
+      <button class="modal-close" onclick="closeModal('editMember')">×</button>
+    </div>
+    <div class="modal-body">
+      <form id="editMemberForm">
+        <div class="form-group">
+          <label class="form-label">Name *</label>
+          <input type="text" id="editMemberName" class="form-input" value="${member.name}" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Discord Tag</label>
+          <input type="text" id="editMemberDiscord" class="form-input" value="${member.discordTag || ''}" placeholder="z.B. Name#1234">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Hauptrolle *</label>
+          <select id="editMemberMainRole" class="form-select" required ${member.mainRole === 'Projektinhaber' ? 'disabled' : ''}>
+            ${mainRoles.map(role => `
+              <option value="${role.name}" ${member.mainRole === role.name ? 'selected' : ''}>${role.name} (${role.category})</option>
+            `).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nebenrollen (optional)</label>
+          <div style="max-height: 200px; overflow-y: auto; border: 2px solid var(--border); border-radius: 0.75rem; padding: 1rem;">
+            ${secondaryRoles.map(role => `
+              <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; cursor: pointer;">
+                <input type="checkbox" name="editSecondaryRoles" value="${role.name}" 
+                  ${member.secondaryRoles && member.secondaryRoles.includes(role.name) ? 'checked' : ''}
+                  style="width: 18px; height: 18px;">
+                <span>${role.name} (${role.category})</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Passwort ändern (optional)</label>
+          <input type="password" id="editMemberPassword" class="form-input" placeholder="Leer lassen für keine Änderung">
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('editMember')">Abbrechen</button>
+      <button class="btn btn-primary" onclick="submitEditMember(${id})">💾 Speichern</button>
+    </div>
+  `);
+}
+
+function submitEditMember(id) {
+  const member = teamMembers.find(m => m.id === id);
+  if (!member) return;
+
+  const name = document.getElementById('editMemberName').value.trim();
+  const discord = document.getElementById('editMemberDiscord').value.trim();
+  const mainRole = document.getElementById('editMemberMainRole').value;
+  const password = document.getElementById('editMemberPassword').value;
+  
+  const secondaryRoleCheckboxes = document.querySelectorAll('input[name="editSecondaryRoles"]:checked');
+  const secondaryRoles = Array.from(secondaryRoleCheckboxes).map(cb => cb.value);
+
+  if (!name || !mainRole) {
+    showNotification('Bitte fülle alle Pflichtfelder aus!', 'danger');
+    return;
+  }
+
+  member.name = name;
+  member.mainRole = mainRole;
+  member.secondaryRoles = secondaryRoles;
+  member.discordTag = discord || null;
+  if (password) member.password = password;
+
+  saveData();
+  addLogEntry(`${name} bearbeitet`, 'team');
+  showNotification('Änderungen gespeichert!');
+  closeModal('editMember');
+  showAdminPage('team');
+}
+
+function kickTeamMember(id) {
+  const m = teamMembers.find(x => x.id === id);
+  if (!m || m.mainRole === 'Projektinhaber' || !confirm(`"${m.name}" wirklich entfernen?`)) return;
+  
+  verifyPassword(() => {
+    teamMembers = teamMembers.filter(x => x.id !== id);
+    saveData();
+    updateBadges();
+    addLogEntry(`"${m.name}" aus dem Team entfernt`, 'team');
+    showNotification('Mitglied entfernt!');
+    showAdminPage('team');
+  }, m.password || '1302');
+}
+
+function renderInfoEditor(content) {
+  content.innerHTML = `
+    <div class="admin-header">
+      <h1 class="admin-header-title">Info-Seite bearbeiten</h1>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">📝 Beschreibung</h2>
+        <button class="btn btn-success btn-sm" onclick="saveInfoData()">💾 Speichern</button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Server Beschreibung</label>
+        <textarea id="infoDescription" class="form-textarea" rows="4">${infoPageData.description}</textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">✨ Aktive Features</h2>
+        <button class="btn btn-success btn-sm" onclick="addFeature()">➕ Feature hinzufügen</button>
+      </div>
+      <div id="featuresList" style="display: grid; gap: 0.75rem;">
+        ${infoPageData.features.map((feature, index) => `
+          <div class="item-card" style="display: flex; align-items: center; gap: 1rem;">
+            <input type="text" class="form-input" value="${feature}" onchange="updateFeature(${index}, this.value)" style="flex: 1;">
+            <button class="btn btn-sm btn-secondary" onclick="archiveFeature(${index})" title="Archivieren">📦</button>
+            <button class="btn btn-sm btn-danger" onclick="removeFeature(${index})" title="Löschen">🗑️</button>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    ${infoPageData.archivedFeatures && infoPageData.archivedFeatures.length > 0 ? `
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">📦 Archivierte Features</h2>
+          <button class="btn btn-danger btn-sm" onclick="clearArchivedFeatures()">🗑️ Alle löschen</button>
+        </div>
+        <div style="display: grid; gap: 0.75rem;">
+          ${infoPageData.archivedFeatures.map((feature, index) => `
+            <div class="item-card" style="display: flex; align-items: center; gap: 1rem; background: var(--gray-50);">
+              <div style="flex: 1; color: var(--text-dim);">${feature}</div>
+              <button class="btn btn-sm btn-success" onclick="restoreFeature(${index})" title="Wiederherstellen">↩️</button>
+              <button class="btn btn-sm btn-danger" onclick="deleteArchivedFeature(${index})" title="Permanent löschen">🗑️</button>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    ` : ''}
+
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">🔗 Discord Link</h2>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Discord Einladungslink</label>
+        <input type="url" id="discordLink" class="form-input" value="${infoPageData.discordLink}">
+      </div>
+    </div>
+  `;
+}
+
+function saveInfoData() {
+  infoPageData.description = document.getElementById('infoDescription').value;
+  infoPageData.discordLink = document.getElementById('discordLink').value;
+  saveData();
+  addLogEntry('Info-Seite aktualisiert', 'info');
+  showNotification('Info-Seite gespeichert!');
+}
+
+function addFeature() {
+  infoPageData.features.push('Neues Feature');
+  saveData();
+  showAdminPage('info-editor');
+}
+
+function updateFeature(index, value) {
+  infoPageData.features[index] = value;
+  saveData();
+}
+
+function removeFeature(index) {
+  if (!confirm('Feature wirklich löschen? (Es wird nicht archiviert)')) return;
+  infoPageData.features.splice(index, 1);
+  saveData();
+  showAdminPage('info-editor');
+}
+
+function archiveFeature(index) {
+  if (!confirm('Feature archivieren?')) return;
+  const feature = infoPageData.features[index];
+  if (!infoPageData.archivedFeatures) {
+    infoPageData.archivedFeatures = [];
+  }
+  infoPageData.archivedFeatures.push(feature);
+  infoPageData.features.splice(index, 1);
+  saveData();
+  addLogEntry(`Feature archiviert: ${feature}`, 'info');
+  showNotification('Feature archiviert!');
+  showAdminPage('info-editor');
+}
+
+function restoreFeature(index) {
+  const feature = infoPageData.archivedFeatures[index];
+  infoPageData.features.push(feature);
+  infoPageData.archivedFeatures.splice(index, 1);
+  saveData();
+  addLogEntry(`Feature wiederhergestellt: ${feature}`, 'info');
+  showNotification('Feature wiederhergestellt!');
+  showAdminPage('info-editor');
+}
+
+function deleteArchivedFeature(index) {
+  if (!confirm('Archiviertes Feature permanent löschen?')) return;
+  const feature = infoPageData.archivedFeatures[index];
+  infoPageData.archivedFeatures.splice(index, 1);
+  saveData();
+  addLogEntry(`Archiviertes Feature gelöscht: ${feature}`, 'info');
+  showNotification('Feature gelöscht!');
+  showAdminPage('info-editor');
+}
+
+function clearArchivedFeatures() {
+  if (!confirm('Alle archivierten Features permanent löschen?')) return;
+  infoPageData.archivedFeatures = [];
+  saveData();
+  addLogEntry('Alle archivierten Features gelöscht', 'info');
+  showNotification('Archiv geleert!');
+  showAdminPage('info-editor');
+}
+
+function renderAdminLogs(content) {
+  content.innerHTML = `
+    <div class="admin-header">
+      <h1 class="admin-header-title">📝 Logs</h1>
+      <div style="display: flex; gap: 0.5rem;">
+        <button class="btn btn-secondary" onclick="archiveAllLogs()">📦 Alle archivieren</button>
+        <button class="btn btn-danger" onclick="clearAllLogs()">🗑️ Alle löschen</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">📝 Aktive Logs</h2>
+        <span class="badge badge-primary">${activityLog.length} Einträge</span>
+      </div>
+      ${activityLog.length === 0 ? '<p style="color: var(--text-dim);">Keine aktiven Logs</p>' : `
+        <div style="display: grid; gap: 0.75rem;">
+          ${activityLog.map(log => `
+            <div class="item-card" style="padding: 1rem;">
+              <div style="display: flex; gap: 1rem; align-items: center;">
+                <span style="font-size: 1.5rem;">${getLogIcon(log.type)}</span>
+                <div style="flex: 1;">
+                  <div style="font-weight: 600;">${log.message}</div>
+                  <div style="font-size: 0.875rem; color: var(--text-dim);">${formatDate(log.timestamp)}</div>
+                </div>
+                <button class="btn btn-sm btn-secondary" onclick="archiveLog(${log.id})" title="Archivieren">📦</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteLog(${log.id})" title="Löschen">🗑️</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `}
+    </div>
+
+    ${archivedLogs.length > 0 ? `
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">📦 Archivierte Logs</h2>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <span class="badge badge-info">${archivedLogs.length} Einträge</span>
+            <button class="btn btn-sm btn-success" onclick="restoreAllLogs()">↩️ Alle wiederherstellen</button>
+            <button class="btn btn-sm btn-danger" onclick="clearArchivedLogs()">🗑️ Archiv leeren</button>
+          </div>
+        </div>
+        <div style="display: grid; gap: 0.75rem;">
+          ${archivedLogs.map(log => `
+            <div class="item-card" style="padding: 1rem; background: var(--gray-50);">
+              <div style="display: flex; gap: 1rem; align-items: center;">
+                <span style="font-size: 1.5rem; opacity: 0.6;">${getLogIcon(log.type)}</span>
+                <div style="flex: 1; opacity: 0.8;">
+                  <div style="font-weight: 600; color: var(--text-dim);">${log.message}</div>
+                  <div style="font-size: 0.875rem; color: var(--text-dim);">${formatDate(log.timestamp)}</div>
+                </div>
+                <button class="btn btn-sm btn-success" onclick="restoreLog(${log.id})" title="Wiederherstellen">↩️</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteArchivedLog(${log.id})" title="Permanent löschen">🗑️</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    ` : ''}
+  `;
+}
+
+function archiveLog(id) {
+  const log = activityLog.find(l => l.id === id);
+  if (!log) return;
+  archivedLogs.unshift(log);
+  activityLog = activityLog.filter(l => l.id !== id);
+  saveData();
+  showNotification('Log archiviert!');
+  showAdminPage('logs');
+}
+
+function restoreLog(id) {
+  const log = archivedLogs.find(l => l.id === id);
+  if (!log) return;
+  activityLog.unshift(log);
+  archivedLogs = archivedLogs.filter(l => l.id !== id);
+  saveData();
+  showNotification('Log wiederhergestellt!');
+  showAdminPage('logs');
+}
+
+function deleteLog(id) {
+  if (!confirm('Log permanent löschen?')) return;
+  activityLog = activityLog.filter(l => l.id !== id);
+  saveData();
+  showNotification('Gelöscht!');
+  showAdminPage('logs');
+}
+
+function deleteArchivedLog(id) {
+  if (!confirm('Archiviertes Log permanent löschen?')) return;
+  archivedLogs = archivedLogs.filter(l => l.id !== id);
+  saveData();
+  showNotification('Archiviertes Log gelöscht!');
+  showAdminPage('logs');
+}
+
+function archiveAllLogs() {
+  if (activityLog.length === 0) {
+    showNotification('Keine Logs zum Archivieren!', 'danger');
+    return;
+  }
+  if (!confirm(`${activityLog.length} Logs archivieren?`)) return;
+  archivedLogs = [...activityLog, ...archivedLogs];
+  activityLog = [];
+  saveData();
+  addLogEntry('Alle Logs archiviert', 'system');
+  showNotification('Alle Logs archiviert!');
+  showAdminPage('logs');
+}
+
+function restoreAllLogs() {
+  if (archivedLogs.length === 0) return;
+  if (!confirm(`${archivedLogs.length} Logs wiederherstellen?`)) return;
+  activityLog = [...archivedLogs, ...activityLog];
+  archivedLogs = [];
+  saveData();
+  addLogEntry('Alle Logs wiederhergestellt', 'system');
+  showNotification('Alle Logs wiederhergestellt!');
+  showAdminPage('logs');
+}
+
+function clearAllLogs() {
+  if (activityLog.length === 0) {
+    showNotification('Keine aktiven Logs!', 'danger');
+    return;
+  }
+  if (!confirm(`ALLE ${activityLog.length} aktiven Logs permanent löschen?`)) return;
+  verifyPassword(() => {
+    activityLog = [];
+    saveData();
+    addLogEntry('Alle aktiven Logs gelöscht', 'system');
+    showNotification('Alle Logs gelöscht!');
+    showAdminPage('logs');
+  });
+}
+
+function clearArchivedLogs() {
+  if (archivedLogs.length === 0) return;
+  if (!confirm(`ALLE ${archivedLogs.length} archivierten Logs permanent löschen?`)) return;
+  verifyPassword(() => {
+    archivedLogs = [];
+    saveData();
+    addLogEntry('Archivierte Logs geleert', 'system');
+    showNotification('Archiv geleert!');
+    showAdminPage('logs');
+  });
+}
+
+function renderAdminSettings(content) {
+  content.innerHTML = `
+    <div class="admin-header">
+      <h1 class="admin-header-title">⚙️ Einstellungen</h1>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">⚙️ Server Einstellungen</h2>
+        <button class="btn btn-success" onclick="saveSettings()">💾 Speichern</button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Servername</label>
+        <input type="text" id="serverName" class="form-input" value="${serverSettings.serverName}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Max. Spieler</label>
+        <input type="number" id="maxPlayers" class="form-input" value="${serverSettings.maxPlayers}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Server Launch Datum</label>
+        <input type="datetime-local" id="launchDate" class="form-input" value="${new Date(serverLaunchDate.getTime() - serverLaunchDate.getTimezoneOffset() * 60000).toISOString().slice(0, 16)}">
+        <div class="form-hint">Stelle das Datum ein, wann der Server starten soll</div>
+      </div>
+    </div>
+  `;
+}
+
+function saveSettings() {
+  serverSettings.serverName = document.getElementById('serverName').value;
+  serverSettings.maxPlayers = parseInt(document.getElementById('maxPlayers').value);
+  const newLaunchDate = document.getElementById('launchDate').value;
+  if (newLaunchDate) {
+    serverLaunchDate = new Date(newLaunchDate);
+  }
+  saveData();
+  addLogEntry('Einstellungen gespeichert', 'settings');
+  showNotification('Gespeichert!');
+  startTimer();
+}
+
+function renderAdminAccounts(content) {
+  if (!currentAdmin || !currentAdmin.canManageAdmins) {
+    content.innerHTML = `
+      <div class="admin-header">
+        <h1 class="admin-header-title">❌ Keine Berechtigung</h1>
+      </div>
+      <div class="card">
+        <p style="color: var(--text-dim);">Du hast keine Berechtigung, Admin-Accounts zu verwalten.</p>
+      </div>
+    `;
+    return;
+  }
+
+  content.innerHTML = `
+    <div class="admin-header">
+      <h1 class="admin-header-title">👤 Admin Accounts</h1>
+      <button class="btn btn-success" onclick="showAddAdminModal()">➕ Admin hinzufügen</button>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">👥 Admin Liste</h2>
+        <span class="badge badge-primary">${adminAccounts.length} Admins</span>
+      </div>
+      <div style="display: grid; gap: 1rem;">
+        ${adminAccounts.map(admin => `
+          <div class="item-card">
+            <div class="item-header">
+              <div style="display: flex; align-items: center; gap: 1rem;">
+                <div class="user-avatar" style="width: 48px; height: 48px;">${admin.username.charAt(0)}</div>
+                <div>
+                  <div class="item-title">${admin.username}</div>
+                  <div class="item-subtitle">Discord: ${admin.discordUser} ${admin.canManageAdmins ? '• 🔑 Super Admin' : ''}</div>
+                  <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">Erstellt: ${formatDate(admin.createdAt)}</div>
+                </div>
+              </div>
+              <div style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-sm btn-secondary" onclick="editAdmin(${admin.id})">✏️</button>
+                ${admin.id !== 1 ? `<button class="btn btn-sm btn-danger" onclick="deleteAdmin(${admin.id})">🗑️</button>` : ''}
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function showAddAdminModal() {
+  showModal('addAdmin', `
+    <div class="modal-header">
+      <h2 class="modal-title">➕ Neuen Admin hinzufügen</h2>
+      <button class="modal-close" onclick="closeModal('addAdmin')">×</button>
+    </div>
+    <div class="modal-body">
+      <form id="addAdminForm">
+        <div class="form-group">
+          <label class="form-label">Benutzername *</label>
+          <input type="text" id="newAdminUsername" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Discord Benutzername *</label>
+          <input type="text" id="newAdminDiscord" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Passwort *</label>
+          <input type="password" id="newAdminPassword" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+            <input type="checkbox" id="newAdminCanManage" style="width: 20px; height: 20px;">
+            <span>Darf andere Admins verwalten (Super Admin)</span>
+          </label>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('addAdmin')">Abbrechen</button>
+      <button class="btn btn-success" onclick="submitAddAdmin()">➕ Hinzufügen</button>
+    </div>
+  `);
+}
+
+function submitAddAdmin() {
+  const username = document.getElementById('newAdminUsername').value.trim();
+  const discord = document.getElementById('newAdminDiscord').value.trim();
+  const password = document.getElementById('newAdminPassword').value;
+  const canManage = document.getElementById('newAdminCanManage').checked;
+
+  if (!username || !discord || !password) {
+    showNotification('Bitte fülle alle Felder aus!', 'danger');
+    return;
+  }
+
+  const admin = {
+    id: Date.now(),
+    username,
+    discordUser: discord,
+    password,
+    canManageAdmins: canManage,
+    createdAt: new Date().toISOString()
+  };
+
+  adminAccounts.push(admin);
+  saveData();
+  addLogEntry(`Admin "${username}" hinzugefügt`, 'system');
+  showNotification('Admin hinzugefügt!');
+  closeModal('addAdmin');
+  showAdminPage('admin-accounts');
+}
+
+function editAdmin(id) {
+  const admin = adminAccounts.find(a => a.id === id);
+  if (!admin) return;
+
+  showModal('editAdmin', `
+    <div class="modal-header">
+      <h2 class="modal-title">✏️ Admin bearbeiten</h2>
+      <button class="modal-close" onclick="closeModal('editAdmin')">×</button>
+    </div>
+    <div class="modal-body">
+      <form id="editAdminForm">
+        <div class="form-group">
+          <label class="form-label">Benutzername *</label>
+          <input type="text" id="editAdminUsername" class="form-input" value="${admin.username}" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Discord Benutzername *</label>
+          <input type="text" id="editAdminDiscord" class="form-input" value="${admin.discordUser}" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Neues Passwort (leer lassen für keine Änderung)</label>
+          <input type="password" id="editAdminPassword" class="form-input">
+        </div>
+        <div class="form-group">
+          <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+            <input type="checkbox" id="editAdminCanManage" ${admin.canManageAdmins ? 'checked' : ''} style="width: 20px; height: 20px;">
+            <span>Darf andere Admins verwalten (Super Admin)</span>
+          </label>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('editAdmin')">Abbrechen</button>
+      <button class="btn btn-primary" onclick="submitEditAdmin(${id})">💾 Speichern</button>
+    </div>
+  `);
+}
+
+function submitEditAdmin(id) {
+  const admin = adminAccounts.find(a => a.id === id);
+  if (!admin) return;
+
+  const username = document.getElementById('editAdminUsername').value.trim();
+  const discord = document.getElementById('editAdminDiscord').value.trim();
+  const password = document.getElementById('editAdminPassword').value;
+  const canManage = document.getElementById('editAdminCanManage').checked;
+
+  if (!username || !discord) {
+    showNotification('Bitte fülle alle Pflichtfelder aus!', 'danger');
+    return;
+  }
+
+  admin.username = username;
+  admin.discordUser = discord;
+  if (password) admin.password = password;
+  admin.canManageAdmins = canManage;
+
+  saveData();
+  addLogEntry(`Admin "${username}" bearbeitet`, 'system');
+  showNotification('Änderungen gespeichert!');
+  closeModal('editAdmin');
+  showAdminPage('admin-accounts');
+}
+
+function deleteAdmin(id) {
+  const admin = adminAccounts.find(a => a.id === id);
+  if (!admin || admin.id === 1 || !confirm(`Admin "${admin.username}" wirklich löschen?`)) return;
+
+  adminAccounts = adminAccounts.filter(a => a.id !== id);
+  saveData();
+  addLogEntry(`Admin "${admin.username}" gelöscht`, 'system');
+  showNotification('Admin gelöscht!');
+  showAdminPage('admin-accounts');
+}
+
+function renderAdminBackup(content) {
+  content.innerHTML = `
+    <div class="admin-header">
+      <h1 class="admin-header-title">💾 Backup</h1>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h2 class="card-title">💾 Backup erstellen</h2>
+        <p style="color: var(--text-dim); margin-bottom: 1.5rem;">Sichere alle Daten als JSON-Datei.</p>
+        <button class="btn btn-success" onclick="exportData()">📥 Jetzt erstellen</button>
+      </div>
+      <div class="card">
+        <h2 class="card-title">📤 Backup importieren</h2>
+        <p style="color: var(--text-dim); margin-bottom: 1.5rem;">Importiere ein Backup (überschreibt aktuelle Daten!).</p>
+        <input type="file" id="importFile" accept=".json" style="display: none;" onchange="handleImport(event)">
+        <button class="btn btn-primary" onclick="document.getElementById('importFile').click()">📤 Importieren</button>
+      </div>
+    </div>
+  `;
+}
+
+function handleImport(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (confirm('Alle aktuellen Daten überschreiben?')) {
+        teamMembers = data.teamMembers || [];
+        applications = data.applications || [];
+        activityLog = data.activityLog || [];
+        archivedLogs = data.archivedLogs || [];
+        serverSettings = data.serverSettings || serverSettings;
+        infoPageData = data.infoPageData || infoPageData;
+        rules = data.rules || rules;
+        if (data.adminAccounts) adminAccounts = data.adminAccounts;
+        if (data.serverLaunchDate) serverLaunchDate = new Date(data.serverLaunchDate);
+        saveData();
+        updateBadges();
+        addLogEntry('Daten importiert', 'system');
+        showNotification('Importiert!');
+        showAdminPage('dashboard');
+      }
+    } catch {
+      showNotification('Fehler beim Importieren!', 'danger');
+    }
+  };
+  reader.readAsText(file);
+}
+
+// Modals
+function showModal(id, content) {
+  document.getElementById('modals').innerHTML = `
+    <div class="modal" id="modal-${id}">
+      <div class="modal-content">${content}</div>
+    </div>
+  `;
+}
+
+function closeModal(id) {
+  document.getElementById(`modal-${id}`)?.remove();
+}
+
+function verifyPassword(callback, expectedPassword = '1302') {
+  showModal('password', `
+    <div class="modal-header">
+      <h2 class="modal-title">🔒 Passwort erforderlich</h2>
+      <button class="modal-close" onclick="closeModal('password')">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Admin-Passwort</label>
+        <input type="password" id="pwdInput" class="form-input">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('password')">Abbrechen</button>
+      <button class="btn btn-primary" onclick="submitPwd('${expectedPassword}', ${callback.toString()})">Bestätigen</button>
+    </div>
+  `);
+  setTimeout(() => document.getElementById('pwdInput')?.focus(), 100);
+}
+
+function submitPwd(expected, callbackStr) {
+  const input = document.getElementById('pwdInput').value;
+  if (input === expected) {
+    closeModal('password');
+    eval('(' + callbackStr + ')')();
+  } else {
+    showNotification('Falsches Passwort!', 'danger');
+  }
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+  loadData();
+  showPublicPage('home');
+  addLogEntry('Website gestartet', 'system');
+});
+</script>
+</body>
+</html>
